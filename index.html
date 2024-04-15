@@ -14,13 +14,22 @@
     </div>
     <br>
 
-    <!-- Load events from JSON file -->
-    <script>
-        $(document).ready(function() {
-            $('#calendar').fullCalendar({
-                events: 'events.json' // Path to your JSON file
-            });
+<!-- Load events from JSON file -->
+<script>
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            // Path to your JSON file
+            events: 'events.json',
+            // Or you can directly specify events here
+            events: [
+                {
+                    title: 'event1',
+                    start: '2024-04-15'
+                }
+            ]
         });
-    </script>
+    });
+</script>
 </body>
 </html>
+
