@@ -22,4 +22,4 @@ jobs:
           pip install -r requirements.txt  # Replace with your requirements file if needed
 
       - name: Run Python Script
-        run: python path/to/your/script.py  # Replace with your script path
+        run: python Data/YESTERDAYDATAPULLER30.py  # Replace with your script path
