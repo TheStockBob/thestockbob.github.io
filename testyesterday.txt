@@ -1,0 +1,51 @@
+import pandas as pd
+import requests
+import os
+
+from datetime import datetime, timedelta
+
+tickers = ['AAGR']
+
+# Define yesterday's date
+yesterday = datetime.now() - timedelta(days=1)
+yesterday_str = yesterday.strftime('%Y-%m-%d')
+
+# Iterate through tickers and corresponding dates
+for ticker in tickers:
+    # Update the API call with yesterday's date
+    url = f"https://api.marketdata.app/v1/stocks/candles/30/{ticker}?from={yesterday_str}&to={yesterday_str}&extended=true&token=M00xRDd1NUs3bmxOZW9sc2oxWDdQWTRWZXcwNGtxRms2TXI4cEE5UUVPRT0"
+    
+    # Send request and handle response
+    response = requests.get(url)
+    data = response.json()
+    
+    # Check if data is available
+    if data.get('s') == 'no_data':
+        print(f"No Data for {ticker}")
+        continue
+
+    # Convert Unix timestamps to datetime and subtract 5 hours
+    data['t'] = pd.to_datetime(data['t'], unit='s') - pd.Timedelta(hours=5)
+
+    # Create DataFrame
+    df = pd.DataFrame(data)
+    
+    # Define file path
+    file_path = f'{ticker}.csv'
+    
+    # Check if file exists
+    if os.path.exists(file_path):
+        # Read existing data
+        existing_data = pd.read_csv(file_path)
+        
+        # Append new data to existing data
+        combined_data = pd.concat([existing_data, df], ignore_index=True)
+    else:
+        # If file does not exist, use the new data as combined data
+        combined_data = df
+    
+    # Export combined DataFrame to CSV
+    combined_data.to_csv(file_path, index=False)
+
+    # Print confirmation message
+    print(f"Sheet '{ticker}' saved.")
