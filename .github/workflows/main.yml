@@ -2,7 +2,7 @@ name: Data Puller Appender
 
 on:
   schedule:
-    - cron: '30 5 * * *'  # Runs every day at 12:30 AM EST (UTC-5)
+    - cron: '30 5 * * 2-6'  # Runs every day at 12:30 AM EST (UTC-5), except Sunday (0) and Monday (1)
 
 jobs:
   run-script:
